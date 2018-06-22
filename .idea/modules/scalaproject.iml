@@ -19,11 +19,13 @@
       <sourceFolder url="file://$MODULE_DIR$/../../target/scala-2.12/resource_managed/test" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="9" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.12.6:jar" level="project" />
     <orderEntry type="library" name="org.json:json:20180130" level="project" />
     <orderEntry type="library" name="acrcloud_sdk_java" level="project" />
     <orderEntry type="library" name="com.mpatric:mp3agic:0.9.1" level="project" />
+    <orderEntry type="library" name="mp3agic" level="project" />
+    <orderEntry type="library" name="scala-sdk-2.10.7" level="project" />
+    <orderEntry type="library" name="scala-swing-2.10.6" level="project" />
   </component>
 </module>
