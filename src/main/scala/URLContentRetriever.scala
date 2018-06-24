@@ -3,7 +3,6 @@ import java.net.{MalformedURLException, URL}
 
 class URLContentRetriever(URLText: String)
 {
-  println(URLText)
   private var wasInitialized = false
   private var URL: URL =  _
   private val result = new StringBuilder()

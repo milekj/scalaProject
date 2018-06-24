@@ -9,7 +9,6 @@ class GUI extends MainFrame {
   title = "Music Files Management"
 
   val pathField = new TextField { columns = 32 }
-
   val statistics = new CheckBox("statistics")
   statistics.selected = true
   val rename = new CheckBox("rename")
@@ -43,7 +42,7 @@ class GUI extends MainFrame {
 
 
     contents += new BoxPanel(Orientation.Horizontal) {
-      contents += Button("Submit") { doyourjob() }
+      contents += Button("Submit") { runOrError() }
       contents += Swing.HGlue
       contents += Button("Close") { reportAndClose() }
     }
@@ -56,33 +55,20 @@ class GUI extends MainFrame {
     sys.exit(0)
   }
 
-  def doyourjob() {
+  private def runOrError() {
+    if (!isValid)
+      Dialog.showMessage(contents.head, "Invalid path", title="Error" )
+    else
+      run()
+  }
 
-    if(pathField.text == "") Dialog.showMessage(contents.head, "Give me your path" , title="Error")
-    tmp.path = pathField.text
+  private def isValid: Boolean = {
+    Files.isDirectory(Paths.get(pathField.text)) && !pathField.text.isEmpty
+  }
 
-    // var directory: Path = null
-    //directory = Paths.get(tmp.path)
+  def run() {
 
-   /* try Files.newDirectoryStream(directory)
-    catch{
-        case e: NoSuchFileException => {
-          Dialog.showMessage(contents.head, tmp.path + " does not exist" , title="Error")
-          throw new IllegalArgumentException(tmp.path + " does not exist", e)
-        }
-        case e: NotDirectoryException => {
-          Dialog.showMessage(contents.head, tmp.path + " is not a directory" , title="Error")
-          throw new IllegalArgumentException(tmp.path + " is not a directory", e)
-        }
-        case e: Throwable => {
-          Dialog.showMessage(contents.head, "Failed to read the directory" , title="Error")
-          throw new IllegalArgumentException("Failed to read the directory", e)
-        }
-      }*/
-
-
-
-    val c = new ACRConfig("identify-eu-west-1.acrcloud.com", "a10f5c60f5e25167c65853b0bf8748ef", "2QRYUcccB6qsOJvNt1AmU3qFwhU3WkQZGohvPDZP", 10, 60)
+    val c = new ACRConfig("identify-eu-west-1.acrcloud.com", "c7fef473bb7e68f294a5ac2bd42566ea", "K6wn9AOHzaGY8mym3nKOhA4w6rk8rcPqRVUQ3yEM", 10, 60)
     val m = new DirectoryManipulator(pathField.text, c, "7a23fab73af11b37110c268a87ac3a57")
 
     if (saveLyrics.selected)  m.applyOnFile(FileManipulatorUtils.saveLyrics)
@@ -90,14 +76,15 @@ class GUI extends MainFrame {
     if (rename.selected) m.applyOnFile(FileManipulatorUtils.rename)
     if (statistics.selected) m.applyOnDirectory(DirectoryManipulatorUtils.statictics)
     if (randomQuote.selected) {
-      m.applyOnDirectory(DirectoryManipulatorUtils.randomQuote)
-      quote()
+      val r = new RandomQuoteRetriever()
+      m.applyOnDirectory(r.randomQuote)
+      quote(r.quote)
     }
 
   }
 
-  def quote() {
-    if(tmp.quote!="") Dialog.showMessage(contents.head, tmp.quote , title="Quote of the day")
+  def quote(q: String) {
+    Dialog.showMessage(contents.head, q , title="Quote of the day")
   }
 
 }

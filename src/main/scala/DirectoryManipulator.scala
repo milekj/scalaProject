@@ -24,6 +24,7 @@ class DirectoryManipulator (directoryPathname: String, config: ACRConfig, APIKey
       val basicRetriever  = basicDataMap.get(filePath)
       val detailsRetriever = detailsMap.get(filePath)
       func(filePath, basicRetriever, detailsRetriever)
+      Thread.sleep(300)
 
       }
       catch {case _: Throwable => }
@@ -32,11 +33,10 @@ class DirectoryManipulator (directoryPathname: String, config: ACRConfig, APIKey
   }
 
 
-  def applyOnDirectory(func: (util.Map[Path, SongBasicDataRetriever], util.Map[Path, SongDetailsRetriever]) => Unit): Unit =
+  def applyOnDirectory(func: (Path, util.Map[Path, SongBasicDataRetriever], util.Map[Path, SongDetailsRetriever]) => Unit): Unit =
   {
-    //try{func(basicDataMap.values, detailsMap.values)}
     initialize()
-    try{func(basicDataMap, detailsMap)}
+    try{func(directory, basicDataMap, detailsMap)}
     catch{case e: Throwable => throw new Exception("Failed to perform operation on directory", e)}
   }
 

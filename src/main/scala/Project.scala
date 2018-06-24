@@ -15,8 +15,8 @@ object QueryUtils
   val titleParam = "&q_track="
   val authorParam = "&q_artist="
   val idParam = "&track_id="
-  //val sortByRatingParam = "&s_track_rating=desc"
-  val sortByRatingParam = "&s_num_favourite=desc"
+  val sortByRatingParam = "&s_track_rating=desc"
+  //val sortByRatingParam = "&s_num_favourite=desc"
 }
 
 object FileManipulatorUtils
@@ -43,7 +43,7 @@ object FileManipulatorUtils
   {
     val x = new SongLyricsRetriever(d.id, "7a23fab73af11b37110c268a87ac3a57")
 
-    val file_name = tmp.path+"\\"+ b.author + " - " + b.title + " (Lyrics).txt"   //tmp.path??????????
+    val file_name = p.resolveSibling("")+"\\"+ b.title + " - " + b.author + " (Lyrics).txt"   //tmp.path??????????
     val writer = new PrintWriter(file_name, "UTF-8")
 
     val lines = x.lyrics.split("\n")
@@ -54,7 +54,7 @@ object FileManipulatorUtils
 
 object DirectoryManipulatorUtils
 {
-  def printAverage(b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever])
+  def printAverage(p: Path, b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever])
   {
 
     var a = 0
@@ -72,9 +72,9 @@ object DirectoryManipulatorUtils
   }
 
 
-  def statictics(b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever])
+  def statictics(p :Path, b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever])
   {
-    val file_name = tmp.path+"\\Statistics.txt"
+    val file_name = p.toString+"\\Statistics.txt"
     val writer = new PrintWriter(file_name, "UTF-8")
 
     val genre_counter = scala.collection.mutable.Map[String,Int]()
@@ -199,21 +199,24 @@ object DirectoryManipulatorUtils
     writer.close()
   }
 
+}
 
-  def randomQuote(b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever])
-  {
+class RandomQuoteRetriever {
+  var quote = ""
+
+  def randomQuote(p: Path, b: util.Map[Path, SongBasicDataRetriever], d: util.Map[Path, SongDetailsRetriever]) {
     val r = scala.util.Random
-    if(d.values().size() > 0) {
+    if (d.values().size() > 0) {
       val r1 = r.nextInt(d.values().size()) //r1 - choosing song
       var i = 0
       for (e <- d.values.asScala) {
         if (i == r1) {
           val x = new SongLyricsRetriever(e.id, "7a23fab73af11b37110c268a87ac3a57")
           val lines = x.lyrics.split("\n")
-          while (tmp.quote == "") {
-            if((lines.length - 4) > 0 ){
+          while (quote == "") {
+            if ((lines.length - 4) > 0) {
               var r2 = r.nextInt(lines.length - 4)
-              tmp.quote = lines(r2) //r2 - choosing line
+              quote = lines(r2) //r2 - choosing line
             }
           }
         }
@@ -221,12 +224,6 @@ object DirectoryManipulatorUtils
       }
     }
   }
-
-}
-
-object tmp{
-  var path=""
-  var quote = ""
 }
 
 object main extends App

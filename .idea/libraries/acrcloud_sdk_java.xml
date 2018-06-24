@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="acrcloud_sdk_java">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../projekt_scala/win64.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../acrcloud_sdk_java/out/artifacts/win64_jar/win64.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
